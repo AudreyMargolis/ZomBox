@@ -79,20 +79,26 @@ public class Player : MonoBehaviour
             {
                 if (hasPistol)
                 {
-                    gunType = 1;
-                    weapons[currentWeapon].SetActive(false);
-                    currentWeapon = 3;
-                    weapons[currentWeapon].SetActive(true);
-                    animator.SetInteger("WeaponType_int", gunType);
+                    SwitchWeapon(1, 3);
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                if (hasAuto)
+                {
+                    SwitchWeapon(2, 4);
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                if (hasAuto)
+                {
+                    SwitchWeapon(4, 5);
                 }
             }
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                gunType = 0;
-                weapons[currentWeapon].SetActive(false);
-                currentWeapon = 0;
-                weapons[currentWeapon].SetActive(true);
-                animator.SetInteger("WeaponType_int", gunType);
+                SwitchWeapon(0, 0);
             }
 
             #endregion
@@ -104,6 +110,19 @@ public class Player : MonoBehaviour
                 {
                     if (canFire)
                         StartCoroutine("PistolFire");
+                }
+                else if (gunType==4)
+                {
+                    if (canFire)
+                        StartCoroutine("ShotgunFire");
+                }
+            }
+            if(Input.GetMouseButton(0))
+            {
+                if (gunType == 2)
+                {
+                    if (canFire)
+                        StartCoroutine("AutoFire");
                 }
             }
         }
@@ -143,11 +162,33 @@ public class Player : MonoBehaviour
                     if (!hasPistol)
                     {
                         hasPistol = true;
-                        gunType = 1;
-                        weapons[currentWeapon].SetActive(false);
-                        currentWeapon = 3;
-                        weapons[currentWeapon].SetActive(true);
-                        animator.SetInteger("WeaponType_int", gunType);
+                        SwitchWeapon(1, 3);
+                    }
+                    else
+                    {
+                        //add ammo
+                    }
+                    break;
+                }
+            case 1: //AK47
+                {
+                    if (!hasAuto)
+                    {
+                        hasAuto = true;
+                        SwitchWeapon(2, 4);
+                    }
+                    else
+                    {
+                        //add ammo
+                    }
+                    break;
+                }
+            case 2: // shotgun
+                {
+                    if (!hasShotgun)
+                    {
+                        hasShotgun = true;
+                        SwitchWeapon(4, 5);
                     }
                     else
                     {
@@ -169,6 +210,14 @@ public class Player : MonoBehaviour
         animator.SetBool("Death_b", true);
        // Destroy(this.gameObject);
     }
+    void SwitchWeapon(int type, int weapon)
+    {
+        gunType = type;
+        weapons[currentWeapon].SetActive(false);
+        currentWeapon = weapon;
+        weapons[currentWeapon].SetActive(true);
+        animator.SetInteger("WeaponType_int", gunType);
+    }
     IEnumerator OneHandedSwing()
     {
         swinging = true;
@@ -189,6 +238,33 @@ public class Player : MonoBehaviour
         animator.SetBool("Shoot_b", false);
         canFire = true;
     }
-
-
+    IEnumerator AutoFire()
+    {
+        canFire = false;
+        animator.SetBool("Shoot_b", true);
+        Instantiate(bullets[0], bulletSpawns[1].transform.position, bulletSpawns[1].transform.rotation);
+        yield return new WaitForSeconds(autoFireRate);
+        animator.SetBool("Shoot_b", false);
+        canFire = true;
+    }
+    IEnumerator ShotgunFire ()
+    {
+        canFire = false;
+      
+        animator.SetBool("Shoot_b", true);
+        Instantiate(bullets[1], bulletSpawns[2].transform.position, bulletSpawns[2].transform.rotation * Quaternion.Euler(new Vector3(0, Random.Range(-45.0f, 45.0f), 0)));
+        Instantiate(bullets[1], bulletSpawns[2].transform.position, bulletSpawns[2].transform.rotation * Quaternion.Euler(new Vector3(0, Random.Range(-45.0f, 45.0f), 0)));
+        Instantiate(bullets[1], bulletSpawns[2].transform.position, bulletSpawns[2].transform.rotation * Quaternion.Euler(new Vector3(0, Random.Range(-45.0f, 45.0f), 0)));
+        Instantiate(bullets[1], bulletSpawns[2].transform.position, bulletSpawns[2].transform.rotation * Quaternion.Euler(new Vector3(0, Random.Range(-45.0f, 45.0f), 0)));
+        Instantiate(bullets[1], bulletSpawns[2].transform.position, bulletSpawns[2].transform.rotation * Quaternion.Euler(new Vector3(0, Random.Range(-45.0f, 45.0f), 0)));
+        Instantiate(bullets[1], bulletSpawns[2].transform.position, bulletSpawns[2].transform.rotation * Quaternion.Euler(new Vector3(0, Random.Range(-45.0f, 45.0f), 0)));
+        Instantiate(bullets[1], bulletSpawns[2].transform.position, bulletSpawns[2].transform.rotation * Quaternion.Euler(new Vector3(0, Random.Range(-45.0f, 45.0f), 0)));
+        Instantiate(bullets[1], bulletSpawns[2].transform.position, bulletSpawns[2].transform.rotation * Quaternion.Euler(new Vector3(0, Random.Range(-45.0f, 45.0f), 0)));
+        Instantiate(bullets[1], bulletSpawns[2].transform.position, bulletSpawns[2].transform.rotation * Quaternion.Euler(new Vector3(0, Random.Range(-45.0f, 45.0f), 0)));
+        Instantiate(bullets[1], bulletSpawns[2].transform.position, bulletSpawns[2].transform.rotation * Quaternion.Euler(new Vector3(0, Random.Range(-45.0f, 45.0f), 0)));
+        Instantiate(bullets[1], bulletSpawns[2].transform.position, bulletSpawns[2].transform.rotation * Quaternion.Euler(new Vector3(0, Random.Range(-45.0f, 45.0f), 0)));
+        yield return new WaitForSeconds(shotgunFireRate);
+        animator.SetBool("Shoot_b", false);
+        canFire = true;
+    }
 }

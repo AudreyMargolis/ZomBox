@@ -61,9 +61,9 @@ public class Zombie : MonoBehaviour
     }
     IEnumerator hitReaction()
     {
-        alive = false;
+        followPlayer = false;
         yield return new WaitForSeconds(0.5f);
-        alive = true;
+        followPlayer = true;
     }
     IEnumerator Attack()
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Pickup : MonoBehaviour
 {
-    public enum pickupType {REVOLVER}
+    public enum pickupType {REVOLVER, AK47, SHOTGUN, SMG}
     public pickupType type;
 
     private void OnTriggerEnter(Collider other)

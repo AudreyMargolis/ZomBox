@@ -24,6 +24,7 @@ public class Bullet : MonoBehaviour
     void OnCollisionEnter(Collision other) {
         if(other.gameObject.tag == "Zombie")
             other.gameObject.GetComponent<Zombie>().hit(dmg);
-        Destroy(this.gameObject);
+        if (!other.gameObject.GetComponent<Bullet>())
+            Destroy(this.gameObject);
     }
 }
